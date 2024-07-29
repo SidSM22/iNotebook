@@ -6,7 +6,7 @@ const { body, validationResult } = require("express-validator");
 // fetch all notes.
 
 
-// Route 1:Get all the notes using : GET "/api/auth/createuser".Login required
+// Route 1:Get all the notes using : GET "/api/notes/createuser".Login required
 router.get("/fetchallnotes", fetchUser, async (req, res) => {
   try {
     const notes = await Note.find({ user: req.user.id });
@@ -18,17 +18,15 @@ router.get("/fetchallnotes", fetchUser, async (req, res) => {
 });
 
 
-// Route 2:Add a new Note using : POST "/api/auth/addnote".Login required
+// Route 2:Add a new Note using : POST "/api/notes/addnote".Login required
 router.post(
   "/addnote",
-  fetchUser,
-  [
+  fetchUser,[
     body("title", "Enter a Valid Title").isLength({ min: 3 }),
     body("description", "Description must be atleast 5 Characters").isLength({
       min: 5,
     }),
-  ],
-  async (req, res) => {
+  ],async (req, res) => {
     try {
       const { title, description, tag } = req.body;
 
@@ -54,4 +52,21 @@ router.post(
   }
 );
 
+// Route 3:Update an Existing Note using : PUT "/api/notes/updatenote/:id".Login required
+router.put("/updatenote/:id",fetchUser,async (req, res) => {
+    const {title,description,tag} = req.body;
+    //Create a new note obj
+    const newNote = {};
+    if(title){newNote.title = title};
+    if(title){newNote.description = description};
+    if(title){newNote.tag = tag};
+
+    //find the note to be updated and update it;
+    let note = await Note.findById(req.params.id);
+    if(!note){return res.status(404).send("Not Found")}
+    if(note.user.toString() != req.user.id){ return res.status(401).send("Not Allowed")}
+
+    note = await Note.findByIdAndUpdate(req.params.id,{$set: newNote},{new:true})
+    res.json(note);
+  })
 module.exports = router;
