@@ -1,7 +1,7 @@
 import React,{useContext,useState} from 'react'
 import noteContext from "../context/notes/noteContext"
 
-const AddNote = () => {
+const AddNote = (props) => {
     const context = useContext(noteContext);
     const {addNote} = context;
 
@@ -10,6 +10,7 @@ const AddNote = () => {
         e.preventDefault();
         addNote(note.title, note.description, note.tag);
         setNote({title: "", description: "", tag: ""})
+        props.showAlert("Added Successfully", "success")
     }
     const onChange = (e) =>{
         //note jesa he waisa bhi rahe or jo bhi name change ho raha he vo uski value ke barabar ho jaye. 

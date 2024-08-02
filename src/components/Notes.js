@@ -2,7 +2,7 @@ import React,{useState, useContext, useEffect,useRef} from 'react'
 import noteContext from "../context/notes/noteContext"
 import Noteitem from './Noteitem';
 import AddNote from './AddNote';
-const Notes = () => {
+const Notes = (props) => {
     const context = useContext(noteContext);
     const {notes, getNotes, editNote} = context;
     useEffect(() => {
@@ -23,6 +23,7 @@ const Notes = () => {
     const handleClick = (e) =>{
         editNote(note.id, note.etitle, note.edescription, note.etag)
         refClose.current.click();
+        props.showAlert("Updated Successfully","success")
     }
     const onChange = (e) =>{
         //note jesa he waisa bhi rahe or jo bhi name change ho raha he vo uski value ke barabar ho jaye. 
@@ -30,7 +31,7 @@ const Notes = () => {
     }
     return (
         <>
-        <AddNote/>
+        <AddNote showAlert={props.showAlert}/>
         <button ref={ref} type="button" className="btn btn-primary d-none" data-bs-toggle="modal" data-bs-target="#exampleModal">
             Launch demo modal
         </button>
@@ -73,7 +74,7 @@ const Notes = () => {
             {notes.length === 0 && 'No Notes to Display'}
             </div>
             {notes.map((note)=>{
-            return <Noteitem key={note._id} updateNote={updateNote} note={note}/>
+            return <Noteitem key={note._id} updateNote={updateNote} showAlert = {props.showAlert} note={note}/>
             })}
         </div>
         </>
