@@ -19,8 +19,9 @@ const Signup = (props) => {
           const json = await response.json();
           console.log(json);
           if(json.success){
+
             // redirect and save the auth token
-            localStorage.setItem('token', json.authtoken)
+            localStorage.setItem('auth-token', json.authToken)
             navigate("/");
             props.showAlert(" Account Created Successfully","success")
           }else{
@@ -35,13 +36,14 @@ const Signup = (props) => {
     }
 
   return (
-    <div className="container">
+    <div className="container mt-2">
+      <h2>Create your Account </h2>
         <form onSubmit={handleSubmit}>
             <div className="mb-3">
                 <label htmlFor="name" className="form-label">Name</label>
                 <input type="text" className="form-control" id="name" name='name' onChange={onChange} aria-describedby="emailHelp"/>
             </div>
-            <div className="mb-3">
+            <div className="mb-3 my-3">
                 <label htmlFor="email" className="form-label">Email address</label>
                 <input type="email" className="form-control" id="email" name='email' onChange={onChange} aria-describedby="emailHelp"/>
                 <div id="emailHelp" className="form-text">We'll never share your email with anyone else.</div>

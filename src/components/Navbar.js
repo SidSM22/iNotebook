@@ -1,8 +1,13 @@
 import React from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 const Navbar = () => {
   let location = useLocation();
+  let navigate = useNavigate();
+  const handleLogout=()=>{
+    localStorage.removeItem('auth-token');
+    navigate("/login");
+  }
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
       <div className="container-fluid">
@@ -23,10 +28,10 @@ const Navbar = () => {
               </Link>
             </li>
           </ul>
-          <form className="d-flex" role="search">
-          <Link className="btn btn-primary mx-1"to="/login"  role="button">Login</Link>
-          <Link className="btn btn-primary mx-1"to="/signup"  role="button">SignUp</Link>
-          </form>
+          {!localStorage.getItem('auth-token') ? <form className="d-flex" role="search">
+          <Link className="btn btn-primary mx-1" to="/login"  role="button">Login</Link>
+          <Link className="btn btn-primary mx-1" to="/signup"  role="button">SignUp</Link>
+          </form> : <button onClick={handleLogout} className="btn btn-primary mx-1">Log Out</button>}
         </div>
       </div>
     </nav>
